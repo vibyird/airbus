@@ -1,6 +1,5 @@
 import { httpServerHandler } from 'cloudflare:node'
 import express from 'express'
-import notFound from './assets/404.html'
 import index from './assets/index.html'
 import subscribe from './routes/subscribe'
 
@@ -13,7 +12,7 @@ app.get('/', async (req, res) => {
 })
 
 app.use(async (req, res) => {
-  res.status(404).send(notFound)
+  res.status(404).send('Not Found')
 })
 
 app.listen(3000)
