@@ -1,16 +1,24 @@
 import express, { Request, Response } from 'express'
-import { rewriteClash } from '../service/subscribe.js'
+import { findSubscriber, rewriteClash } from '../service/subscribe.js'
 
 const subscribe = express.Router()
 
 subscribe.get('', async (req: Request, res: Response) => {
   const token = req.query.token as string
+  if (!token) {
+    res.status(400).send('Bad Request')
+    return
+  }
 
   try {
+    const subscriber = await findSubscriber(token)
+    if (!subscriber) {
+      res.status(404).send('Not Found')
+      return
+    }
     const userAgent = req.headers['user-agent'] || ''
     if (/clash/i.test(userAgent) || /stash/i.test(userAgent)) {
-      const data = await rewriteClash(token)
-
+      const data = await rewriteClash(subscriber)
       res
         .status(200)
         .setHeaders(
@@ -20,7 +28,6 @@ subscribe.get('', async (req: Request, res: Response) => {
           }),
         )
         .send(data)
-
       return
     } else {
       res.status(404).send('Not Found')
