@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express'
-import { findSubscriber, rewriteClash } from '../service/subscribe'
+import { findSubscriber, getClashConfig } from '../service/subscribe'
 
 const subscribe = express.Router()
 
@@ -27,7 +27,7 @@ subscribe.get('/:token', async (req: Request, res: Response) => {
     const userAgent = req.headers['user-agent'] || ''
     if (/clash/i.test(userAgent) || /stash/i.test(userAgent)) {
       directDomains.push(...subscriber.directDomains)
-      const data = await rewriteClash({
+      const config = await getClashConfig({
         ...subscriber,
         directDomains,
       })
@@ -39,7 +39,7 @@ subscribe.get('/:token', async (req: Request, res: Response) => {
             'Content-Disposition': 'attachment; filename=airbus.yaml',
           }),
         )
-        .send(data)
+        .send(config)
       return
     } else {
       res.status(404).send('Not Found')

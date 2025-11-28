@@ -31,7 +31,7 @@ export async function findSubscriber(token: string): Promise<Subscriber | null> 
   }
 }
 
-export async function rewriteClash({
+export async function getClashConfig({
   subscribeName,
   subscribeUrl,
   directDomains,
