@@ -1,0 +1,19 @@
+name = "airbus"
+main = "src/index.ts"
+compatibility_flags = ["nodejs_compat"]
+compatibility_date = "2025-11-28"
+
+[[rules]]
+type = "Text"
+globs = ["**/*.html"]
+fallthrough = true
+
+[[rules]]
+type = "Text"
+globs = ["**/*.yaml"]
+fallthrough = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "db"
+database_id = "f1e93a5d-7d09-43b1-ad29-d478c37feb5a"

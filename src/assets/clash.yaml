@@ -1,0 +1,209 @@
+mode: rule
+log-level: info
+mixed-port: 7890
+ipv6: false
+# DNS
+dns:
+  enable: true
+  ipv6: false
+  default-nameserver:
+    - 119.29.29.29
+    - 223.5.5.5
+  nameserver:
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+# 代理供应商
+proxy-providers:
+  ${subscribeName}:
+    type: http
+    url: ${subscribeUrl}
+    path: ./Proxies/${subscribeName}.yaml
+    interval: 3600
+    filter: '^(?!.*(?:(?i:Traffic)|(?i:Expire)|网址|流量|到期|重置))'
+# 代理组
+default-group: &default-group
+  type: select
+  proxies:
+    - 香港
+    - 新加坡
+    - 日本
+    - 美国
+    - 其它
+service-group: &service-group
+  type: select
+  proxies:
+    - 默认
+    - 香港
+    - 新加坡
+    - 日本
+    - 美国
+    - 其它
+region-group: &region-group
+  type: select
+  include-all: true
+proxy-groups:
+  - name: 默认
+    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/Proxy.png
+    <<: *default-group
+  # Service Groups
+  - name: Netflix
+    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/Netflix.png
+    <<: *service-group
+  - name: TikTok
+    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/TikTok.png
+    <<: *service-group
+  - name: AI
+    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/AI.png
+    <<: *service-group
+  # Region Groups
+  - name: 香港
+    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/Hong_Kong.png
+    <<: *region-group
+    filter: '港|🇭🇰|HK|(?i:Hong *Kong)'
+  - name: 新加坡
+    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/Singapore.png
+    <<: *region-group
+    filter: '新加坡|🇸🇬|SG|(?i:Singapore)'
+  - name: 日本
+    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/Japan.png
+    <<: *region-group
+    filter: '日|🇯🇵|JP|(?i:Japan)'
+  - name: 美国
+    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/United_States.png
+    <<: *region-group
+    filter: '美|🇺🇲|US|(?i:United *States)'
+  - name: 其它
+    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/Global.png
+    <<: *region-group
+    filter: '^(?!.*(?:港|🇭🇰|HK|(?i:Hong *Kong)|新加坡|🇸🇬|SG|(?i:Singapore)|日|🇯🇵|JP|(?i:Japan)|美|🇺🇲|US|(?i:United *States)))'
+# 规则供应商
+rule-providers:
+  Proxy:
+    type: http
+    behavior: classical
+    interval: 86400
+    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/ProxyLite/ProxyLite_No_Resolve.yaml
+    path: ./Rules/Proxy.yaml
+  # China
+  China:
+    type: http
+    behavior: classical
+    interval: 86400
+    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/China/China_No_Resolve.yaml
+    path: ./Rules/China.yaml
+  China_Domain:
+    type: http
+    behavior: domain
+    interval: 86400
+    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/China/China_Domain.yaml
+    path: ./Rules/China_Domain.yaml
+  # Microsoft
+  Microsoft:
+    type: http
+    behavior: classical
+    interval: 86400
+    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Microsoft/Microsoft_No_Resolve.yaml
+    path: ./Rules/Microsoft.yaml
+  Bing:
+    type: http
+    behavior: classical
+    interval: 86400
+    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Bing/Bing_No_Resolve.yaml
+    path: ./Rules/Bing.yaml
+  Copilot:
+    type: http
+    behavior: classical
+    interval: 86400
+    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Copilot/Copilot_No_Resolve.yaml
+    path: ./Rules/Copilot.yaml
+  # Google
+  Google:
+    type: http
+    behavior: classical
+    interval: 86400
+    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Google/Google_No_Resolve.yaml
+    path: ./Rules/Google.yaml
+  # Apple
+  Apple:
+    type: http
+    behavior: classical
+    interval: 86400
+    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Apple/Apple_No_Resolve.yaml
+    path: ./Rules/Apple.yaml
+  Apple_Domain:
+    type: http
+    behavior: domain
+    interval: 86400
+    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Apple/Apple_Domain.yaml
+    path: ./Rules/Apple_Domain.yaml
+  # Netflix
+  Netflix:
+    type: http
+    behavior: classical
+    interval: 86400
+    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Netflix/Netflix_No_Resolve.yaml
+    path: ./Rules/Netflix.yaml
+  Netflix_IP:
+    type: http
+    behavior: ipcidr
+    interval: 86400
+    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Netflix/Netflix_IP.yaml
+    path: ./Rules/Netflix_IP.yaml
+  # TikTok
+  TikTok:
+    type: http
+    behavior: classical
+    interval: 86400
+    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/TikTok/TikTok_No_Resolve.yaml
+    path: ./Rules/TikTok.yaml
+  # AI
+  OpenAI:
+    type: http
+    behavior: classical
+    interval: 86400
+    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/OpenAI/OpenAI_No_Resolve.yaml
+    path: ./Rules/OpenAI.yaml
+  Gemini:
+    type: http
+    behavior: classical
+    interval: 86400
+    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Gemini/Gemini_No_Resolve.yaml
+    path: ./Rules/Gemini.yaml
+  Claude:
+    type: http
+    behavior: classical
+    interval: 86400
+    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Claude/Claude_No_Resolve.yaml
+    path: ./Rules/Claude.yaml
+# 规则
+rules:
+  - DOMAIN,fastly.jsdelivr.net,DIRECT
+  - DOMAIN-SUFFIX,${directDomain},DIRECT
+  # Netflix
+  - RULE-SET,Netflix,Netflix
+  - RULE-SET,Netflix_IP,Netflix
+  # TikTok
+  - RULE-SET,TikTok,TikTok
+  # AI
+  - RULE-SET,OpenAI,AI
+  - RULE-SET,Gemini,AI
+  - RULE-SET,Claude,AI
+  # Microsoft
+  - RULE-SET,Bing,默认
+  - RULE-SET,Copilot,默认
+  - RULE-SET,Microsoft,DIRECT
+  # Google
+  - RULE-SET,Google,默认
+  # Apple
+  - RULE-SET,Apple,DIRECT
+  - RULE-SET,Apple_Domain,DIRECT
+  # Others
+  - RULE-SET,China,DIRECT
+  - RULE-SET,China_Domain,DIRECT
+  - RULE-SET,Proxy,默认
+
+  # Private
+  - GEOIP,private,DIRECT,no-resolve
+  # Others
+  - GEOIP,CN,DIRECT
+  - MATCH,默认
