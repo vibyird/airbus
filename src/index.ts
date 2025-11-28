@@ -6,11 +6,7 @@ import subscribe from './routes/subscribe.js'
 
 const app = express()
 
-const api = express.Router()
-
-api.use('/subscribe', subscribe)
-
-app.use('/api', api)
+app.use('/subscribe', subscribe)
 
 app.get('/', async (req, res) => {
   res.send(index)

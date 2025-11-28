@@ -3,8 +3,8 @@ import { findSubscriber, rewriteClash } from '../service/subscribe.js'
 
 const subscribe = express.Router()
 
-subscribe.get('', async (req: Request, res: Response) => {
-  const token = req.query.token as string
+subscribe.get('/:token', async (req: Request, res: Response) => {
+  const token = req.params.token
   if (!token) {
     res.status(400).send('Bad Request')
     return
