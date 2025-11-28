@@ -2,7 +2,7 @@ import { httpServerHandler } from 'cloudflare:node'
 import express from 'express'
 import notFound from './assets/404.html'
 import index from './assets/index.html'
-import subscribe from './routes/subscribe.js'
+import subscribe from './routes/subscribe'
 
 const app = express()
 

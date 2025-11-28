@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express'
-import { findSubscriber, rewriteClash } from '../service/subscribe.js'
+import { findSubscriber, rewriteClash } from '../service/subscribe'
 
 const subscribe = express.Router()
 
