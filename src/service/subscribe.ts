@@ -11,7 +11,7 @@ interface SubscriberRecord {
 interface Subscriber {
   subscribeName: string
   subscribeUrl: string
-  directDomains: string
+  directDomains: string[]
 }
 
 export async function findSubscriber(token: string): Promise<Subscriber | null> {
@@ -24,7 +24,10 @@ export async function findSubscriber(token: string): Promise<Subscriber | null> 
   return {
     subscribeName: subscriber.subscribe_name,
     subscribeUrl: subscriber.subscribe_url,
-    directDomains: subscriber.direct_domains,
+    directDomains: subscriber.direct_domains
+      .split(',')
+      .map((domain) => domain.trim())
+      .filter(Boolean),
   }
 }
 
@@ -35,7 +38,7 @@ export async function rewriteClash({
 }: {
   subscribeName: string
   subscribeUrl: string
-  directDomains: string
+  directDomains: string[]
 }): Promise<string> {
   const regex = /^([^\r\n,]+),\$\{directDomain\},([^\r\n,]+\r?\n)/m
   const match = clash.match(regex)
@@ -49,11 +52,5 @@ export async function rewriteClash({
   return clash
     .replace(/\${subscribeName}/g, subscribeName)
     .replace(/\${subscribeUrl}/g, subscribeUrl)
-    .replace(
-      regex,
-      directDomains
-        .split(',')
-        .map((directDomain) => `${prefix},${directDomain},${suffix}`)
-        .join(''),
-    )
+    .replace(regex, directDomains.map((directDomain) => `${prefix},${directDomain},${suffix}`).join(''))
 }
