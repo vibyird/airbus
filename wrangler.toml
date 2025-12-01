@@ -18,9 +18,6 @@ type = "Text"
 globs = ["**/*.yaml"]
 fallthrough = true
 
-[vars]
-DIRECT_DOMAINS = "medowo.net"
-
 [[d1_databases]]
 binding = "DB"
 database_name = "db"
