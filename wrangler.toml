@@ -11,6 +11,9 @@ globs = ["**/*.html", "**/*.yaml"]
 type = "Data"
 globs = ["**/*.ico"]
 
+[vars]
+DIRECT_DOMAINS = "medowo.net"
+
 [[d1_databases]]
 binding = "DB"
 database_name = "db"
