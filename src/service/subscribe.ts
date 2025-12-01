@@ -40,7 +40,7 @@ export async function getClashConfig({
   subscribeUrl: string
   directDomains: string[]
 }): Promise<string> {
-  const regex = /([^\r\n,]+, *)\$\{directDomain\}( *,[^\r\n,]+\r?\n)/m
+  const regex = /([^\r\n]*)\$\{directDomain\}([^\r\n]*)(\r?\n)/m
   const match = clash.match(regex)
   if (!match) {
     throw new Error('Direct domain placeholder not found in template')
@@ -50,5 +50,5 @@ export async function getClashConfig({
   return clash
     .replace(/\${subscribeName}/g, subscribeName)
     .replace(/\${subscribeUrl}/g, subscribeUrl)
-    .replace(regex, directDomains.map((directDomain) => line.replace(regex, `$1${directDomain}$2`)).join(''))
+    .replace(regex, directDomains.map((directDomain) => line.replace(regex, `$1${directDomain}$2$3`)).join(''))
 }
