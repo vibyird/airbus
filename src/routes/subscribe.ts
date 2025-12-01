@@ -2,8 +2,8 @@ import Router from 'koa-router'
 import clashConfig from '../assets/clash.yaml'
 import { findSubscriber } from '../service/subscribe'
 
-const subscribe = new Router()
-subscribe.get('/:token', async (ctx) => {
+const router = new Router()
+router.get('/:token', async (ctx) => {
   const token = ctx.params.token
   if (!token) {
     ctx.status = 404
@@ -55,4 +55,4 @@ subscribe.get('/:token', async (ctx) => {
   }
 })
 
-export default subscribe
+export default router
