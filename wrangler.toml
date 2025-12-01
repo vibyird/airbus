@@ -9,6 +9,11 @@ globs = ["**/*.html"]
 fallthrough = true
 
 [[rules]]
+type = "Data"
+globs = ["**/*.ico"]
+fallthrough = true
+
+[[rules]]
 type = "Text"
 globs = ["**/*.yaml"]
 fallthrough = true
