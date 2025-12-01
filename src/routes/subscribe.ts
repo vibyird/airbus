@@ -31,23 +31,17 @@ subscribe.get('/:token', async (req: Request, res: Response) => {
 
     const userAgent = req.headers['user-agent'] || ''
     if (/clash/i.test(userAgent) || /stash/i.test(userAgent)) {
-      res
-        .status(200)
-        .setHeaders(
-          new Headers({
-            'Content-Type': 'application/x-yaml; charset=utf-8',
-            'Content-Disposition': `attachment; filename=${subscribeName}.yaml`,
-          }),
-        )
-        .send(
-          clashConfig
-            .replace(/\${subscribeName}/g, subscribeName)
-            .replace(/\${subscribeUrl}/g, subscribeUrl)
-            .replace(
-              /([^\r\n]*)\$\{directDomain\}([^\r\n]*)(\r?\n)/m,
-              directDomains.map((directDomain) => `$1${directDomain}$2$3`).join(''),
-            ),
-        )
+      res.setHeader('Content-Type', 'application/x-yaml; charset=utf-8')
+      res.setHeader('Content-Disposition', `attachment; filename=${subscribeName}.yaml`)
+      res.send(
+        clashConfig
+          .replace(/\${subscribeName}/g, subscribeName)
+          .replace(/\${subscribeUrl}/g, subscribeUrl)
+          .replace(
+            /([^\r\n]*)\$\{directDomain\}([^\r\n]*)(\r?\n)/m,
+            directDomains.map((directDomain) => `$1${directDomain}$2$3`).join(''),
+          ),
+      )
       return
     } else {
       res.status(404).send('Not Found')
