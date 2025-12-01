@@ -1,20 +1,21 @@
-import express, { Request, Response } from 'express'
+import Router from 'koa-router'
 import clashConfig from '../assets/clash.yaml'
 import { findSubscriber } from '../service/subscribe'
 
-const subscribe = express.Router()
-
-subscribe.get('/:token', async (req: Request, res: Response) => {
-  const token = req.params.token
+const subscribe = new Router()
+subscribe.get('/:token', async (ctx) => {
+  const token = ctx.params.token
   if (!token) {
-    res.status(404).send('Not Found')
+    ctx.status = 404
+    ctx.body = 'Not Found'
     return
   }
 
   try {
     const subscriber = await findSubscriber(token)
     if (!subscriber) {
-      res.status(404).send('Not Found')
+      ctx.status = 404
+      ctx.body = 'Not Found'
       return
     }
     const directDomains = []
@@ -29,26 +30,28 @@ subscribe.get('/:token', async (req: Request, res: Response) => {
     const { subscribeName, subscribeUrl } = subscriber
     directDomains.push(...subscriber.directDomains)
 
-    const userAgent = req.headers['user-agent'] || ''
+    const userAgent = ctx.get('user-agent')
     if (/clash/i.test(userAgent) || /stash/i.test(userAgent)) {
-      res.setHeader('Content-Type', 'application/x-yaml; charset=utf-8')
-      res.setHeader('Content-Disposition', `attachment; filename=${subscribeName}.yaml`)
-      res.send(
-        clashConfig
-          .replace(/\${subscribeName}/g, subscribeName)
-          .replace(/\${subscribeUrl}/g, subscribeUrl)
-          .replace(
-            /([^\r\n]*)\$\{directDomain\}([^\r\n]*)(\r?\n)/m,
-            directDomains.map((directDomain) => `$1${directDomain}$2$3`).join(''),
-          ),
-      )
+      ctx.set({
+        'Content-Type': 'application/x-yaml; charset=utf-8',
+        'Content-Disposition': `attachment; filename=${subscribeName}.yaml`,
+      })
+      ctx.body = clashConfig
+        .replace(/\${subscribeName}/g, subscribeName)
+        .replace(/\${subscribeUrl}/g, subscribeUrl)
+        .replace(
+          /([^\r\n]*)\$\{directDomain\}([^\r\n]*)(\r?\n)/m,
+          directDomains.map((directDomain) => `$1${directDomain}$2$3`).join(''),
+        )
       return
     } else {
-      res.status(404).send('Not Found')
+      ctx.status = 404
+      ctx.body = 'Not Found'
       return
     }
   } catch (error) {
-    res.status(500).send('Server Error')
+    ctx.status = 500
+    ctx.body = 'Server Error'
   }
 })
 

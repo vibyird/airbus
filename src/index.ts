@@ -1,25 +1,31 @@
 import { httpServerHandler } from 'cloudflare:node'
-import express from 'express'
+import Koa from 'koa'
+import Router from 'koa-router'
 import favicon from './assets/favicon.ico'
 import index from './assets/index.html'
 import subscribe from './routes/subscribe'
 
-const app = express()
+const app = new Koa()
 
-app.get('/', async (req, res) => {
-  res.send(index)
+const router = new Router()
+
+router.get('/', async (ctx) => {
+  ctx.body = index
 })
 
-app.get('/favicon.ico', async (req, res) => {
-  res.setHeader('Content-Type', 'image/x-icon')
-  res.send(Buffer.from(favicon))
+router.get('/favicon.ico', async (ctx) => {
+  ctx.set('Content-Type', 'image/x-icon')
+  ctx.body = Buffer.from(favicon)
 })
 
-app.use('/subscribe', subscribe)
+router.use('/subscribe', subscribe.routes())
 
-app.use(async (req, res) => {
-  res.status(404).send('Not Found')
+router.use(async (ctx) => {
+  ctx.status = 404
+  ctx.body = 'Not Found'
 })
+
+app.use(router.routes()).use(router.allowedMethods())
 
 app.listen(3000)
 export default httpServerHandler({ port: 3000 })
