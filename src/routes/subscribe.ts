@@ -1,12 +1,13 @@
 import express, { Request, Response } from 'express'
-import { findSubscriber, getClashConfig } from '../service/subscribe'
+import clashConfig from '../assets/clash.yaml'
+import { findSubscriber } from '../service/subscribe'
 
 const subscribe = express.Router()
 
 subscribe.get('/:token', async (req: Request, res: Response) => {
   const token = req.params.token
   if (!token) {
-    res.status(400).send('Bad Request')
+    res.status(404).send('Not Found')
     return
   }
 
@@ -24,13 +25,12 @@ subscribe.get('/:token', async (req: Request, res: Response) => {
           .filter(Boolean),
       )
     }
+
+    const { subscribeName, subscribeUrl } = subscriber
+    directDomains.push(...subscriber.directDomains)
+
     const userAgent = req.headers['user-agent'] || ''
     if (/clash/i.test(userAgent) || /stash/i.test(userAgent)) {
-      directDomains.push(...subscriber.directDomains)
-      const config = await getClashConfig({
-        ...subscriber,
-        directDomains,
-      })
       res
         .status(200)
         .setHeaders(
@@ -39,7 +39,15 @@ subscribe.get('/:token', async (req: Request, res: Response) => {
             'Content-Disposition': `attachment; filename=${subscriber.subscribeName}.yaml`,
           }),
         )
-        .send(config)
+        .send(
+          clashConfig
+            .replace(/\${subscribeName}/g, subscribeName)
+            .replace(/\${subscribeUrl}/g, subscribeUrl)
+            .replace(
+              /([^\r\n]*)\$\{directDomain\}([^\r\n]*)(\r?\n)/m,
+              directDomains.map((directDomain) => `$1${directDomain}$2$3`).join(''),
+            ),
+        )
       return
     } else {
       res.status(404).send('Not Found')

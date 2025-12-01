@@ -30,21 +30,3 @@ export async function findSubscriber(token: string): Promise<Subscriber | null> 
       .filter(Boolean),
   }
 }
-
-export async function getClashConfig({
-  subscribeName,
-  subscribeUrl,
-  directDomains,
-}: {
-  subscribeName: string
-  subscribeUrl: string
-  directDomains: string[]
-}): Promise<string> {
-  return clash
-    .replace(/\${subscribeName}/g, subscribeName)
-    .replace(/\${subscribeUrl}/g, subscribeUrl)
-    .replace(
-      /([^\r\n]*)\$\{directDomain\}([^\r\n]*)(\r?\n)/m,
-      directDomains.map((directDomain) => `$1${directDomain}$2$3`).join(''),
-    )
-}
