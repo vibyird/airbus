@@ -8,12 +8,7 @@ directory = "./public"
 
 [[rules]]
 type = "Text"
-globs = ["**/*.html", "**/*.yaml"]
-fallthrough = true
-
-[[rules]]
-type = "Data"
-globs = ["**/*.ico"]
+globs = ["**/*.yaml"]
 fallthrough = true
 
 [vars]
