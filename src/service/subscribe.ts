@@ -1,5 +1,4 @@
 import { env } from 'cloudflare:workers'
-import clash from '../assets/clash.yaml'
 
 interface SubscriberRecord {
   token: string
