@@ -36,7 +36,7 @@ subscribe.get('/:token', async (req: Request, res: Response) => {
         .setHeaders(
           new Headers({
             'Content-Type': 'application/x-yaml; charset=utf-8',
-            'Content-Disposition': 'attachment; filename=airbus.yaml',
+            'Content-Disposition': `attachment; filename=${subscriber.subscribeName}.yaml`,
           }),
         )
         .send(config)
