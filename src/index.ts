@@ -1,11 +1,9 @@
 import { httpServerHandler } from 'cloudflare:node'
-import Koa from 'koa'
+import App from 'koa'
 import Router from 'koa-router'
 import favicon from './assets/favicon.ico'
 import index from './assets/index.html'
 import subscribe from './routes/subscribe'
-
-const app = new Koa()
 
 const router = new Router()
 
@@ -24,6 +22,8 @@ router.use(async (ctx) => {
   ctx.status = 404
   ctx.body = 'Not Found'
 })
+
+const app = new App()
 
 app.use(router.routes()).use(router.allowedMethods())
 
