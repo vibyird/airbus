@@ -6,10 +6,12 @@ compatibility_date = "2025-11-28"
 [[rules]]
 type = "Text"
 globs = ["**/*.html", "**/*.yaml"]
+fallthrough = true
 
 [[rules]]
 type = "Data"
 globs = ["**/*.ico"]
+fallthrough = true
 
 [vars]
 DIRECT_DOMAINS = "medowo.net"
