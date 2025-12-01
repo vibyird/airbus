@@ -3,6 +3,9 @@ main = "src/index.ts"
 compatibility_flags = ["nodejs_compat"]
 compatibility_date = "2025-11-28"
 
+[assets]
+directory = "./public"
+
 [[rules]]
 type = "Text"
 globs = ["**/*.html", "**/*.yaml"]

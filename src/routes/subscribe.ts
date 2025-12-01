@@ -7,7 +7,6 @@ router.get('/:token', async (ctx) => {
   const token = ctx.params.token
   if (!token) {
     ctx.status = 404
-    ctx.body = 'Not Found'
     return
   }
 
@@ -15,7 +14,6 @@ router.get('/:token', async (ctx) => {
     const subscriber = await findSubscriber(token)
     if (!subscriber) {
       ctx.status = 404
-      ctx.body = 'Not Found'
       return
     }
     const directDomains = []
@@ -46,12 +44,10 @@ router.get('/:token', async (ctx) => {
       return
     } else {
       ctx.status = 404
-      ctx.body = 'Not Found'
       return
     }
   } catch (error) {
     ctx.status = 500
-    ctx.body = 'Server Error'
   }
 })
 
