@@ -45,7 +45,6 @@ service-group-cn: &service-group-cn
   type: select
   proxies:
     - 直连
-    - 默认
     - 香港
     - 新加坡
     - 日本
