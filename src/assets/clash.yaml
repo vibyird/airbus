@@ -41,6 +41,16 @@ service-group: &service-group
     - 日本
     - 美国
     - 其它
+service-group-cn: &service-group-cn
+  type: select
+  proxies:
+    - 直连
+    - 默认
+    - 香港
+    - 新加坡
+    - 日本
+    - 美国
+    - 其它
 region-group: &region-group
   type: select
   include-all: true
@@ -57,9 +67,7 @@ proxy-groups:
     <<: *service-group
   - name: BiliBili
     icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/bilibili.png
-    <<: *service-group
-    proxies:
-      - 直连
+    <<: *service-group-cn
   - name: AI
     icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/AI.png
     <<: *service-group
