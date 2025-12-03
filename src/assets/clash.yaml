@@ -20,6 +20,9 @@ proxy-providers:
     path: ./Proxies/${subscribeName}.yaml
     interval: 3600
     filter: '^(?!.*(?:(?i:Traffic)|(?i:Expire)|网址|流量|到期|重置))'
+proxies:
+  - name: 直连
+    type: direct
 # 代理组
 default-group: &default-group
   type: select
@@ -52,6 +55,11 @@ proxy-groups:
   - name: TikTok
     icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/TikTok.png
     <<: *service-group
+  - name: BiliBili
+    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/bilibili.png
+    <<: *service-group
+    proxies:
+      - 直连
   - name: AI
     icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/AI.png
     <<: *service-group
@@ -149,6 +157,13 @@ rule-providers:
     interval: 86400
     url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Netflix/Netflix_IP.yaml
     path: ./Rules/Netflix_IP.yaml
+  # BiliBili
+  BiliBili:
+    type: http
+    behavior: classical
+    interval: 86400
+    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/BiliBili/BiliBili_No_Resolve.yaml
+    path: ./Rules/BiliBili.yaml
   # TikTok
   TikTok:
     type: http
@@ -184,6 +199,8 @@ rules:
   - RULE-SET,Netflix_IP,Netflix
   # TikTok
   - RULE-SET,TikTok,TikTok
+  # BiliBili
+  - RULE-SET,BiliBili,BiliBili
   # AI
   - RULE-SET,OpenAI,AI
   - RULE-SET,Gemini,AI
