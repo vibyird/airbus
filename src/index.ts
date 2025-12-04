@@ -1,6 +1,6 @@
+import Router from '@koa/router'
 import { httpServerHandler } from 'cloudflare:node'
 import App from 'koa'
-import Router from 'koa-router'
 import subscribe from './routes/subscribe'
 
 const router = new Router()

@@ -1,4 +1,4 @@
-import Router from 'koa-router'
+import Router from '@koa/router'
 import clashConfig from '../assets/clash.yaml'
 import { findSubscriber } from '../service/subscribe'
 
