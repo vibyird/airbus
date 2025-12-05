@@ -22,7 +22,7 @@ proxy-providers:
     filter: '^(?!.*(?:(?i:Traffic)|(?i:Expire)|网址|流量|到期|重置))'
 proxies:
   - name: 直连
-    type: direct
+    type: DIRECT
 # 代理组
 default-group: &default-group
   type: select

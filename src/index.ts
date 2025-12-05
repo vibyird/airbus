@@ -16,4 +16,5 @@ app.use(async (ctx) => {
 })
 
 app.listen(3000)
+
 export default httpServerHandler({ port: 3000 })
