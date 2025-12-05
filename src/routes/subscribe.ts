@@ -62,15 +62,16 @@ router.get('/provider/:token', async (ctx) => {
   const { subscribeUrl } = subscriber
   const userAgent = ctx.get('user-agent')
   if (/clash/i.test(userAgent) || /stash/i.test(userAgent)) {
-    const upstreamUrl = new url.URL(subscribeUrl)
-    if (!upstreamUrl) {
+    const upstream = new url.URL(subscribeUrl)
+    if (!upstream) {
       ctx.throw(502)
       return
     }
-    const upstream = await new Promise<http.IncomingMessage>((resolve, reject) => {
-      ;(upstreamUrl.protocol === 'https:' ? https : http)
-        .get(upstreamUrl, { headers: { 'user-agent': userAgent } }, (upstream) => {
-          resolve(upstream)
+
+    const res = await new Promise<http.IncomingMessage>((resolve, reject) => {
+      ;(upstream.protocol === 'https:' ? https : http)
+        .get(upstream, { headers: { 'User-Agent': userAgent } }, (res) => {
+          resolve(res)
         })
         .on('error', (e) => {
           reject(e)
@@ -78,10 +79,10 @@ router.get('/provider/:token', async (ctx) => {
     })
 
     // set status
-    ctx.status = upstream.statusCode || 404
+    ctx.status = res.statusCode || 404
     // set headers
     const headers: Record<string, string | string[]> = {}
-    for (const [k, v] of Object.entries(upstream.headers)) {
+    for (const [k, v] of Object.entries(res.headers)) {
       if (v !== undefined) {
         // remove undefined
         headers[k] = Array.isArray(v) ? v.slice() : v
@@ -90,7 +91,7 @@ router.get('/provider/:token', async (ctx) => {
     ctx.set(headers)
     // set body
     const chunks = []
-    for await (const chunk of upstream) {
+    for await (const chunk of res) {
       chunks.push(chunk) // 每个 chunk 已经是 Buffer
     }
     ctx.body = Buffer.concat(chunks)
