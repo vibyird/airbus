@@ -44,7 +44,7 @@ router.get('/:token', async (ctx) => {
     })
     ctx.body = clashConfig
       .replace(/\${subscribeName}/g, subscribeName)
-      .replace(/\${subscribeUrl}/g, `${ctx.protocol}://${ctx.host}/subscribe/provider/${token}`)
+      .replace(/\${subscribeUrl}/g, `${ctx.url.replace(`/${token}`, `/provider/${token}`)}`)
       .replace(
         /([^\r\n]*)\$\{directDomain\}([^\r\n]*)(\r?\n)/m,
         directDomains.map((directDomain) => `$1${directDomain}$2$3`).join(''),
