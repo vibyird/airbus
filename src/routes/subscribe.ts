@@ -1,9 +1,16 @@
 import Router from '@koa/router'
 import http from 'http'
 import https from 'https'
+import yaml from 'js-yaml'
 import url from 'url'
 import clashConfig from '../assets/clash.yaml'
 import { findSubscriber } from '../service/subscribe'
+
+interface ClashConfig {
+  proxies: {
+    name: string
+  }[]
+}
 
 const router = new Router()
 router.get('/:token', async (ctx) => {
@@ -78,23 +85,34 @@ router.get('/provider/:token', async (ctx) => {
         })
     })
 
-    // set status
-    ctx.status = res.statusCode || 404
-    // set headers
-    const headers: Record<string, string | string[]> = {}
+    if (res.statusCode !== 200) {
+      ctx.throw(res.statusCode || 502)
+      return
+    }
+
+    // get headers
+    const headers: Record<string, string | string[]> = {
+      'Content-Type': 'application/x-yaml; charset=utf-8',
+    }
     for (const [k, v] of Object.entries(res.headers)) {
-      if (v !== undefined) {
-        // remove undefined
+      if (['profile-update-interval', 'profile-web-page-url', 'subscription-userinfo'].includes(k) && v !== undefined) {
         headers[k] = Array.isArray(v) ? v.slice() : v
       }
     }
-    ctx.set(headers)
-    // set body
+
+    // get proxies
     const chunks = []
     for await (const chunk of res) {
       chunks.push(chunk) // 每个 chunk 已经是 Buffer
     }
-    ctx.body = Buffer.concat(chunks)
+    const config = yaml.load(Buffer.concat(chunks).toString()) as ClashConfig
+    const proxies = config.proxies.filter((proxy) => !/(?:Traffic|Expire|网址|流量|到期|重置)/i.test(proxy.name))
+
+    // set headers and body
+    ctx.set(headers)
+    ctx.body = yaml.dump({
+      proxies,
+    })
     return
   }
   ctx.throw(404)

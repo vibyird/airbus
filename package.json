@@ -11,9 +11,11 @@
   },
   "dependencies": {
     "@koa/router": "^15.0.0",
+    "js-yaml": "^4.1.1",
     "koa": "^3.1.1"
   },
   "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
     "@types/koa": "^3.0.1",
     "@types/node": "^24.10.1",
     "prettier": "^3.6.2",
