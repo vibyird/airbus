@@ -4,7 +4,7 @@ import https from 'https'
 import yaml from 'js-yaml'
 import url from 'url'
 import clashConfig from '../assets/clash.yaml'
-import { findConfig } from '../service/subscribe'
+import { findProvider } from '../service/subscribe'
 
 interface ClashConfig {
   proxies: {
@@ -20,13 +20,13 @@ router.get('/:token', async (ctx) => {
     return
   }
 
-  let config = await findConfig(token)
-  if (!config) {
+  let provider = await findProvider(token)
+  if (!provider) {
     ctx.throw(404)
     return
   }
 
-  const { name, subscribeName } = config
+  const { name, subscribeName } = provider
   const directDomains = []
   if (process.env.DIRECT_DOMAINS) {
     directDomains.push(
@@ -35,7 +35,7 @@ router.get('/:token', async (ctx) => {
         .filter(Boolean),
     )
   }
-  directDomains.push(...config.directDomains)
+  directDomains.push(...provider.directDomains)
 
   const userAgent = ctx.get('user-agent')
   if (/clash/i.test(userAgent) || /stash/i.test(userAgent)) {
@@ -65,13 +65,13 @@ router.get('/provider/:token', async (ctx) => {
     return
   }
 
-  let config = await findConfig(token)
-  if (!config) {
+  let provider = await findProvider(token)
+  if (!provider) {
     ctx.throw(404)
     return
   }
 
-  const { subscribeUrl } = config
+  const { subscribeUrl } = provider
 
   const userAgent = ctx.get('user-agent')
   if (/clash/i.test(userAgent) || /stash/i.test(userAgent)) {
