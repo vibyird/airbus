@@ -28,8 +28,9 @@ router.get('/:token', async (ctx) => {
 
   const { subscribeName: fileName } = subscriber
 
-  if (!/https?:/.test(subscriber.subscribeUrl)) {
-    subscriber = await findSubscriber(subscriber.subscribeUrl)
+  if (/^urn:airbus:/.test(subscriber.subscribeUrl)) {
+    const token = subscriber.subscribeUrl.replace(/^urn:airbus:/, '')
+    subscriber = await findSubscriber(token)
     if (!subscriber) {
       ctx.throw(404)
       return
@@ -81,8 +82,9 @@ router.get('/provider/:token', async (ctx) => {
     return
   }
 
-  if (!/https?:/.test(subscriber.subscribeUrl)) {
-    subscriber = await findSubscriber(subscriber.subscribeUrl)
+  if (/^urn:airbus:/.test(subscriber.subscribeUrl)) {
+    const token = subscriber.subscribeUrl.replace(/^urn:airbus:/, '')
+    subscriber = await findSubscriber(token)
     if (!subscriber) {
       ctx.throw(404)
       return
