@@ -28,7 +28,7 @@ export async function findProvider(token: string): Promise<Provider | null> {
     }
   }
   return {
-    name: name,
+    name,
     realName: provider.name,
     subscribeUrl: provider.subscribe_uri,
     directDomains: provider.direct_domains
