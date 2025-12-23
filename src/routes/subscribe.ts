@@ -26,7 +26,7 @@ router.get('/:token', async (ctx) => {
     return
   }
 
-  const { name, subscribeName } = provider
+  const { name: fileName, realName: subscribeName } = provider
   const directDomains = []
   if (process.env.DIRECT_DOMAINS) {
     directDomains.push(
@@ -41,7 +41,7 @@ router.get('/:token', async (ctx) => {
   if (/clash/i.test(userAgent) || /stash/i.test(userAgent)) {
     ctx.set({
       'Content-Type': 'application/x-yaml; charset=utf-8',
-      'Content-Disposition': `attachment; filename=${name}.yaml`,
+      'Content-Disposition': `attachment; filename=${fileName}.yaml`,
     })
     ctx.body = clashConfig
       .replace(/\${subscribeName}/g, subscribeName)
