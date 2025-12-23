@@ -20,11 +20,23 @@ router.get('/:token', async (ctx) => {
     return
   }
 
-  const subscriber = await findSubscriber(token)
+  let subscriber = await findSubscriber(token)
   if (!subscriber) {
     ctx.throw(404)
     return
   }
+
+  const { subscribeName: fileName } = subscriber
+
+  if (!/https?:/.test(subscriber.subscribeUrl)) {
+    subscriber = await findSubscriber(subscriber.subscribeUrl)
+    if (!subscriber) {
+      ctx.throw(404)
+      return
+    }
+  }
+
+  const { subscribeName } = subscriber
   const directDomains = []
   if (process.env.DIRECT_DOMAINS) {
     directDomains.push(
@@ -33,14 +45,13 @@ router.get('/:token', async (ctx) => {
         .filter(Boolean),
     )
   }
-  const { subscribeName } = subscriber
   directDomains.push(...subscriber.directDomains)
 
   const userAgent = ctx.get('user-agent')
   if (/clash/i.test(userAgent) || /stash/i.test(userAgent)) {
     ctx.set({
       'Content-Type': 'application/x-yaml; charset=utf-8',
-      'Content-Disposition': `attachment; filename=${subscribeName}.yaml`,
+      'Content-Disposition': `attachment; filename=${fileName}.yaml`,
     })
     ctx.body = clashConfig
       .replace(/\${subscribeName}/g, subscribeName)
@@ -64,12 +75,22 @@ router.get('/provider/:token', async (ctx) => {
     return
   }
 
-  const subscriber = await findSubscriber(token)
+  let subscriber = await findSubscriber(token)
   if (!subscriber) {
     ctx.throw(404)
     return
   }
+
+  if (!/https?:/.test(subscriber.subscribeUrl)) {
+    subscriber = await findSubscriber(subscriber.subscribeUrl)
+    if (!subscriber) {
+      ctx.throw(404)
+      return
+    }
+  }
+
   const { subscribeUrl } = subscriber
+
   const userAgent = ctx.get('user-agent')
   if (/clash/i.test(userAgent) || /stash/i.test(userAgent)) {
     const upstream = new url.URL(subscribeUrl)
@@ -106,7 +127,7 @@ router.get('/provider/:token', async (ctx) => {
     // get proxies
     const chunks = []
     for await (const chunk of res) {
-      chunks.push(chunk) // 每个 chunk 已经是 Buffer
+      chunks.push(chunk)
     }
     const config = yaml.load(Buffer.concat(chunks).toString()) as ClashConfig
     const proxies = config.proxies.filter((proxy) => !/(?:Traffic|Expire|网址|流量|到期|重置)/i.test(proxy.name))
