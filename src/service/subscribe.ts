@@ -7,20 +7,32 @@ interface SubscriberRecord {
   direct_domains: string
 }
 
-interface Subscriber {
+interface Config {
+  name: string
   subscribeName: string
   subscribeUrl: string
   directDomains: string[]
 }
 
-export async function findSubscriber(token: string): Promise<Subscriber | null> {
-  const subscriber = await env.DB.prepare('SELECT * FROM [subscribers] WHERE token = ?')
+export async function findConfig(token: string): Promise<Config | null> {
+  let subscriber = await env.DB.prepare('SELECT * FROM [subscribers] WHERE token = ?')
     .bind(token)
     .first<SubscriberRecord>()
   if (!subscriber) {
     return null
   }
+  const name = subscriber.subscribe_name
+  while (/^urn:airbus:/.test(subscriber.subscribe_url)) {
+    token = subscriber.subscribe_url.replace(/^urn:airbus:/, '')
+    subscriber = await env.DB.prepare('SELECT * FROM [subscribers] WHERE token = ?')
+      .bind(token)
+      .first<SubscriberRecord>()
+    if (!subscriber) {
+      return null
+    }
+  }
   return {
+    name,
     subscribeName: subscriber.subscribe_name,
     subscribeUrl: subscriber.subscribe_url,
     directDomains: subscriber.direct_domains

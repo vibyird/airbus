@@ -4,7 +4,7 @@ import https from 'https'
 import yaml from 'js-yaml'
 import url from 'url'
 import clashConfig from '../assets/clash.yaml'
-import { findSubscriber } from '../service/subscribe'
+import { findConfig } from '../service/subscribe'
 
 interface ClashConfig {
   proxies: {
@@ -20,24 +20,13 @@ router.get('/:token', async (ctx) => {
     return
   }
 
-  let subscriber = await findSubscriber(token)
-  if (!subscriber) {
+  let config = await findConfig(token)
+  if (!config) {
     ctx.throw(404)
     return
   }
 
-  const { subscribeName: fileName } = subscriber
-
-  if (/^urn:airbus:/.test(subscriber.subscribeUrl)) {
-    const token = subscriber.subscribeUrl.replace(/^urn:airbus:/, '')
-    subscriber = await findSubscriber(token)
-    if (!subscriber) {
-      ctx.throw(404)
-      return
-    }
-  }
-
-  const { subscribeName } = subscriber
+  const { name, subscribeName } = config
   const directDomains = []
   if (process.env.DIRECT_DOMAINS) {
     directDomains.push(
@@ -46,13 +35,13 @@ router.get('/:token', async (ctx) => {
         .filter(Boolean),
     )
   }
-  directDomains.push(...subscriber.directDomains)
+  directDomains.push(...config.directDomains)
 
   const userAgent = ctx.get('user-agent')
   if (/clash/i.test(userAgent) || /stash/i.test(userAgent)) {
     ctx.set({
       'Content-Type': 'application/x-yaml; charset=utf-8',
-      'Content-Disposition': `attachment; filename=${fileName}.yaml`,
+      'Content-Disposition': `attachment; filename=${name}.yaml`,
     })
     ctx.body = clashConfig
       .replace(/\${subscribeName}/g, subscribeName)
@@ -76,22 +65,13 @@ router.get('/provider/:token', async (ctx) => {
     return
   }
 
-  let subscriber = await findSubscriber(token)
-  if (!subscriber) {
+  let config = await findConfig(token)
+  if (!config) {
     ctx.throw(404)
     return
   }
 
-  if (/^urn:airbus:/.test(subscriber.subscribeUrl)) {
-    const token = subscriber.subscribeUrl.replace(/^urn:airbus:/, '')
-    subscriber = await findSubscriber(token)
-    if (!subscriber) {
-      ctx.throw(404)
-      return
-    }
-  }
-
-  const { subscribeUrl } = subscriber
+  const { subscribeUrl } = config
 
   const userAgent = ctx.get('user-agent')
   if (/clash/i.test(userAgent) || /stash/i.test(userAgent)) {
