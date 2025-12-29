@@ -18,3 +18,9 @@ DIRECT_DOMAINS = "medowo.net"
 binding = "DB"
 database_name = "db"
 database_id = "f1e93a5d-7d09-43b1-ad29-d478c37feb5a"
+
+[observability.logs]
+enabled = false
+head_sampling_rate = 1
+invocation_logs = true
+persist = true
