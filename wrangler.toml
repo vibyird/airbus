@@ -20,8 +20,16 @@ database_name = "db"
 database_id = "f1e93a5d-7d09-43b1-ad29-d478c37feb5a"
 
 [observability]
-[observability.logs]
 enabled = false
 head_sampling_rate = 1
-invocation_logs = true
+
+[observability.logs]
+enabled = true
+head_sampling_rate = 1
 persist = true
+invocation_logs = true
+
+[observability.traces]
+enabled = false
+persist = true
+head_sampling_rate = 1
