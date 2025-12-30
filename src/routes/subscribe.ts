@@ -26,7 +26,7 @@ router.get('/:token', async (ctx) => {
     return
   }
 
-  const { name: fileName, realName: subscribeName } = provider
+  const { name: fileName, realName: subscribeName, token: providerToken } = provider
   const directDomains = []
   if (process.env.DIRECT_DOMAINS) {
     directDomains.push(
@@ -47,7 +47,7 @@ router.get('/:token', async (ctx) => {
       .replace(/\${subscribeName}/g, subscribeName)
       .replace(
         /\${subscribeUrl}/g,
-        `${ctx.protocol}://${ctx.host}${ctx.url.replace(`/${token}`, `/provider/${token}`)}`,
+        `${ctx.protocol}://${ctx.host}${ctx.url.replace(`/${token}`, `/provider/${providerToken}`)}`,
       )
       .replace(
         /([^\r\n]*)\$\{directDomain\}([^\r\n]*)(\r?\n)/m,

@@ -10,6 +10,7 @@ interface ProviderRecord {
 interface Provider {
   name: string
   realName: string
+  token: string
   subscribeUrl: string
   directDomains: string[]
 }
@@ -30,6 +31,7 @@ export async function findProvider(token: string): Promise<Provider | null> {
   return {
     name,
     realName: provider.name,
+    token: provider.token,
     subscribeUrl: provider.subscribe_uri,
     directDomains: provider.direct_domains
       .split(',')
