@@ -112,7 +112,9 @@ router.get('/provider/:token', async (ctx) => {
       chunks.push(chunk)
     }
     const config = yaml.load(Buffer.concat(chunks).toString()) as ClashConfig
-    const proxies = config.proxies.filter((proxy) => !/(?:Traffic|Expire|网址|流量|到期|重置)/i.test(proxy.name))
+    const proxies = config.proxies.filter(
+      (proxy) => !/(?:Traffic|Expire|网址|流量|到期|重置|優惠|訂閱)/i.test(proxy.name),
+    )
 
     // set headers and body
     ctx.set(headers)
