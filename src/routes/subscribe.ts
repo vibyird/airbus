@@ -71,7 +71,7 @@ router.get('/provider/:token', async (ctx) => {
     return
   }
 
-  const { subscribeUrl } = provider
+  const { subscribeUrl, excludeRegex } = provider
 
   const userAgent = ctx.get('user-agent')
   if (/clash/i.test(userAgent) || /stash/i.test(userAgent)) {
@@ -112,9 +112,7 @@ router.get('/provider/:token', async (ctx) => {
       chunks.push(chunk)
     }
     const config = yaml.load(Buffer.concat(chunks).toString()) as ClashConfig
-    const proxies = config.proxies.filter(
-      (proxy) => !/(?:Traffic|Expire|网址|流量|到期|重置|優惠|訂閱|🎉)/i.test(proxy.name),
-    )
+    const proxies = config.proxies.filter((proxy) => (excludeRegex ? !excludeRegex.test(proxy.name) : true))
 
     // set headers and body
     ctx.set(headers)

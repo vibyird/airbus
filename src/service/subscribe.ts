@@ -5,6 +5,7 @@ interface ProviderRecord {
   name: string
   subscribe_uri: string
   direct_domains: string
+  exclude_regex: string
 }
 
 interface Provider {
@@ -13,6 +14,7 @@ interface Provider {
   token: string
   subscribeUrl: string
   directDomains: string[]
+  excludeRegex: RegExp | null
 }
 
 export async function findProvider(token: string): Promise<Provider | null> {
@@ -37,5 +39,6 @@ export async function findProvider(token: string): Promise<Provider | null> {
       .split(',')
       .map((domain) => domain.trim())
       .filter(Boolean),
+    excludeRegex: provider.exclude_regex ? new RegExp(provider.exclude_regex) : null,
   }
 }
