@@ -65,8 +65,8 @@ proxy-groups:
   - name: TikTok
     icon: ${url}/IconSet/TikTok.png
     <<: *service-group
-  - name: Instagram
-    icon: ${url}/IconSet/Instagram.png
+  - name: Meta
+    icon: ${url}/IconSet/Meta.png
     <<: *service-group
   - name: BiliBili
     icon: ${url}/IconSet/BiliBili.png
@@ -175,13 +175,25 @@ rule-providers:
     interval: 86400
     url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/BiliBili/BiliBili_No_Resolve.yaml
     path: ./Rules/BiliBili.yaml
-  # Instagram
+  # Meta
+  Facebook:
+    type: http
+    behavior: classical
+    interval: 86400
+    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Facebook/Facebook_No_Resolve.yaml
+    path: ./Rules/Facebook.yaml
   Instagram:
     type: http
     behavior: classical
     interval: 86400
     url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Instagram/Instagram_No_Resolve.yaml
     path: ./Rules/Instagram.yaml
+  Whatsapp:
+    type: http
+    behavior: classical
+    interval: 86400
+    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Whatsapp/Whatsapp_No_Resolve.yaml
+    path: ./Rules/Whatsapp.yaml
   # TikTok
   TikTok:
     type: http
@@ -217,8 +229,10 @@ rules:
   - RULE-SET,Netflix_IP,Netflix
   # TikTok
   - RULE-SET,TikTok,TikTok
-  # Instagram
-  - RULE-SET,Instagram,Instagram
+  # Meta
+  - RULE-SET,Facebook,Meta
+  - RULE-SET,Instagram,Meta
+  - RULE-SET,Whatsapp,Meta
   # BiliBili
   - RULE-SET,BiliBili,BiliBili
   # AI
