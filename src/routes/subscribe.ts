@@ -44,6 +44,7 @@ router.get('/:token', async (ctx) => {
       'Content-Disposition': `attachment; filename=${fileName}.yaml`,
     })
     ctx.body = clashConfig
+      .replace(/\${url}/g, `${ctx.protocol}://${ctx.host}`)
       .replace(/\${subscribeName}/g, subscribeName)
       .replace(
         /\${subscribeUrl}/g,
