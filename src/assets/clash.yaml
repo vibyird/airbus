@@ -65,6 +65,9 @@ proxy-groups:
   - name: TikTok
     icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/TikTok.png
     <<: *service-group
+  - name: Instagram
+    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/Instagram.png
+    <<: *service-group
   - name: BiliBili
     icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/bilibili.png
     <<: *service-group-cn
@@ -172,6 +175,13 @@ rule-providers:
     interval: 86400
     url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/BiliBili/BiliBili_No_Resolve.yaml
     path: ./Rules/BiliBili.yaml
+  # Instagram
+  Instagram:
+    type: http
+    behavior: classical
+    interval: 86400
+    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Instagram/Instagram_No_Resolve.yaml
+    path: ./Rules/Instagram.yaml
   # TikTok
   TikTok:
     type: http
@@ -207,6 +217,8 @@ rules:
   - RULE-SET,Netflix_IP,Netflix
   # TikTok
   - RULE-SET,TikTok,TikTok
+  # Instagram
+  - RULE-SET,Instagram,Instagram
   # BiliBili
   - RULE-SET,BiliBili,BiliBili
   # AI
