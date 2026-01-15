@@ -75,7 +75,7 @@ router.get('/provider/:token', async (ctx) => {
   const { subscribeUrl, excludeRegex } = provider
 
   const userAgent = ctx.get('user-agent')
-  if (/clash/i.test(userAgent) || /stash/i.test(userAgent)) {
+  if (/Clash|Stash|Shadowrocket/i.test(userAgent)) {
     const upstream = new url.URL(subscribeUrl)
     if (!upstream) {
       ctx.throw(502)
@@ -97,32 +97,74 @@ router.get('/provider/:token', async (ctx) => {
       return
     }
 
-    // get headers
-    const headers: Record<string, string | string[]> = {
-      'Content-Type': 'application/x-yaml; charset=utf-8',
-    }
-    for (const [k, v] of Object.entries(res.headers)) {
-      if (['profile-update-interval', 'profile-web-page-url', 'subscription-userinfo'].includes(k) && v !== undefined) {
-        headers[k] = Array.isArray(v) ? v.slice() : v
-      }
-    }
-
-    // get proxies
+    // get body
     const chunks = []
     for await (const chunk of res) {
       chunks.push(chunk)
     }
-    const config = yaml.load(Buffer.concat(chunks).toString()) as ClashConfig
-    const proxies = config.proxies.filter((proxy) => (excludeRegex ? !excludeRegex.test(proxy.name) : true))
+    const body = Buffer.concat(chunks).toString()
 
-    // set headers and body
-    ctx.set(headers)
-    ctx.body = yaml.dump({
-      proxies,
-    })
-    return
+    if (/Clash|Stash/i.test(userAgent)) {
+      // get headers
+      const headers: Record<string, string | string[]> = {
+        'Content-Type': 'application/x-yaml; charset=utf-8',
+      }
+      for (const [k, v] of Object.entries(res.headers)) {
+        if (
+          ['profile-update-interval', 'profile-web-page-url', 'subscription-userinfo'].includes(k) &&
+          v !== undefined
+        ) {
+          headers[k] = Array.isArray(v) ? v.slice() : v
+        }
+      }
+
+      const config = yaml.load(body) as ClashConfig
+      const proxies = config.proxies.filter((proxy) => (excludeRegex ? !excludeRegex.test(proxy.name) : true))
+
+      // set headers and body
+      ctx.set(headers)
+      ctx.body = yaml.dump({
+        proxies,
+      })
+      return
+    } else if (/Shadowrocket/i.test(userAgent)) {
+      const lines = Buffer.from(body, 'base64')
+        .toString('utf8')
+        .split(/\r?\n/)
+        .map((line) => line.trim())
+        .filter(Boolean)
+
+      const config = []
+      const status = lines.filter((line) => /^STATUS=/i.test(line)).shift()
+      if (status) {
+        config.push(status)
+      }
+
+      const proxies = lines
+        .filter((line) => !/^STATUS=/i.test(line))
+        .filter((proxy) => {
+          if (!excludeRegex) {
+            return true
+          }
+          let [, name] = proxy.split('#')
+          if (!name) {
+            return true
+          }
+          return !excludeRegex.test(decodeURIComponent(name))
+        })
+
+      if (proxies.length > 0) {
+        config.push(...proxies)
+      }
+
+      // set headers and body
+      ctx.body = Buffer.from(config.join('\n'), 'utf8').toString('base64')
+    } else {
+      ctx.throw(404)
+    }
+  } else {
+    ctx.throw(404)
   }
-  ctx.throw(404)
 })
 
 export default router
