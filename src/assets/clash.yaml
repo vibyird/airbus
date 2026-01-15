@@ -74,6 +74,9 @@ proxy-groups:
   - name: AI
     icon: ${url}/IconSet/AI.png
     <<: *service-group
+  - name: Google
+    icon: ${url}/IconSet/Google.png
+    <<: *service-group
   # Region Groups
   - name: 香港
     icon: ${url}/IconSet/Hong_Kong.png
@@ -208,12 +211,6 @@ rule-providers:
     interval: 86400
     url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/OpenAI/OpenAI_No_Resolve.yaml
     path: ./Rules/OpenAI.yaml
-  Gemini:
-    type: http
-    behavior: classical
-    interval: 86400
-    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Gemini/Gemini_No_Resolve.yaml
-    path: ./Rules/Gemini.yaml
   Claude:
     type: http
     behavior: classical
@@ -237,14 +234,13 @@ rules:
   - RULE-SET,BiliBili,BiliBili
   # AI
   - RULE-SET,OpenAI,AI
-  - RULE-SET,Gemini,AI
   - RULE-SET,Claude,AI
   # Microsoft
   - RULE-SET,Bing,默认
   - RULE-SET,Copilot,默认
   - RULE-SET,Microsoft,DIRECT
   # Google
-  - RULE-SET,Google,默认
+  - RULE-SET,Google,Google
   # Apple
   - RULE-SET,Apple,DIRECT
   - RULE-SET,Apple_Domain,DIRECT
