@@ -59,11 +59,14 @@ proxy-groups:
     icon: ${url}/IconSet/Proxy.png
     <<: *default-group
   # Service Groups
-  - name: Netflix
-    icon: ${url}/IconSet/Netflix.png
+  - name: YouTube
+    icon: ${url}/IconSet/YouTube.png
     <<: *service-group
   - name: TikTok
     icon: ${url}/IconSet/TikTok.png
+    <<: *service-group
+  - name: Netflix
+    icon: ${url}/IconSet/Netflix.png
     <<: *service-group
   - name: Meta
     icon: ${url}/IconSet/Meta.png
@@ -158,6 +161,20 @@ rule-providers:
     interval: 86400
     url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Apple/Apple_Domain.yaml
     path: ./Rules/Apple_Domain.yaml
+  # YouTube
+  YouTube:
+    type: http
+    behavior: classical
+    interval: 86400
+    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/YouTube/YouTube_No_Resolve.yaml
+    path: ./Rules/YouTube.yaml
+  # TikTok
+  TikTok:
+    type: http
+    behavior: classical
+    interval: 86400
+    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/TikTok/TikTok_No_Resolve.yaml
+    path: ./Rules/TikTok.yaml
   # Netflix
   Netflix:
     type: http
@@ -197,13 +214,6 @@ rule-providers:
     interval: 86400
     url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Whatsapp/Whatsapp_No_Resolve.yaml
     path: ./Rules/Whatsapp.yaml
-  # TikTok
-  TikTok:
-    type: http
-    behavior: classical
-    interval: 86400
-    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/TikTok/TikTok_No_Resolve.yaml
-    path: ./Rules/TikTok.yaml
   # AI
   OpenAI:
     type: http
@@ -221,11 +231,13 @@ rule-providers:
 rules:
   - DOMAIN,fastly.jsdelivr.net,DIRECT
   - DOMAIN-SUFFIX,${directDomain},DIRECT
+  # YouTube
+  - RULE-SET,YouTube,YouTube
+  # TikTok
+  - RULE-SET,TikTok,TikTok
   # Netflix
   - RULE-SET,Netflix,Netflix
   - RULE-SET,Netflix_IP,Netflix
-  # TikTok
-  - RULE-SET,TikTok,TikTok
   # Meta
   - RULE-SET,Facebook,Meta
   - RULE-SET,Instagram,Meta
