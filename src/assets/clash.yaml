@@ -68,14 +68,14 @@ proxy-groups:
   - name: Netflix
     icon: ${url}/IconSet/Netflix.png
     <<: *service-group
-  - name: Meta
-    icon: ${url}/IconSet/Meta.png
-    <<: *service-group
   - name: BiliBili
     icon: ${url}/IconSet/BiliBili.png
     <<: *service-group-cn
   - name: AI
     icon: ${url}/IconSet/AI.png
+    <<: *service-group
+  - name: Meta
+    icon: ${url}/IconSet/Meta.png
     <<: *service-group
   - name: Google
     icon: ${url}/IconSet/Google.png
@@ -195,6 +195,19 @@ rule-providers:
     interval: 86400
     url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/BiliBili/BiliBili_No_Resolve.yaml
     path: ./Rules/BiliBili.yaml
+  # AI
+  OpenAI:
+    type: http
+    behavior: classical
+    interval: 86400
+    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/OpenAI/OpenAI_No_Resolve.yaml
+    path: ./Rules/OpenAI.yaml
+  Claude:
+    type: http
+    behavior: classical
+    interval: 86400
+    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Claude/Claude_No_Resolve.yaml
+    path: ./Rules/Claude.yaml
   # Meta
   Facebook:
     type: http
@@ -214,19 +227,6 @@ rule-providers:
     interval: 86400
     url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Whatsapp/Whatsapp_No_Resolve.yaml
     path: ./Rules/Whatsapp.yaml
-  # AI
-  OpenAI:
-    type: http
-    behavior: classical
-    interval: 86400
-    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/OpenAI/OpenAI_No_Resolve.yaml
-    path: ./Rules/OpenAI.yaml
-  Claude:
-    type: http
-    behavior: classical
-    interval: 86400
-    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Claude/Claude_No_Resolve.yaml
-    path: ./Rules/Claude.yaml
 # 规则
 rules:
   - DOMAIN,fastly.jsdelivr.net,DIRECT
@@ -238,15 +238,15 @@ rules:
   # Netflix
   - RULE-SET,Netflix,Netflix
   - RULE-SET,Netflix_IP,Netflix
-  # Meta
-  - RULE-SET,Facebook,Meta
-  - RULE-SET,Instagram,Meta
-  - RULE-SET,Whatsapp,Meta
   # BiliBili
   - RULE-SET,BiliBili,BiliBili
   # AI
   - RULE-SET,OpenAI,AI
   - RULE-SET,Claude,AI
+  # Meta
+  - RULE-SET,Facebook,Meta
+  - RULE-SET,Instagram,Meta
+  - RULE-SET,Whatsapp,Meta
   # Microsoft
   - RULE-SET,Bing,默认
   - RULE-SET,Copilot,默认
