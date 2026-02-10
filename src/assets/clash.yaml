@@ -180,14 +180,8 @@ rule-providers:
     type: http
     behavior: classical
     interval: 86400
-    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Netflix/Netflix_No_Resolve.yaml
+    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Netflix/Netflix_Classical_No_Resolve.yaml
     path: ./Rules/Netflix.yaml
-  Netflix_IP:
-    type: http
-    behavior: ipcidr
-    interval: 86400
-    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Netflix/Netflix_IP.yaml
-    path: ./Rules/Netflix_IP.yaml
   # BiliBili
   BiliBili:
     type: http
@@ -237,7 +231,6 @@ rules:
   - RULE-SET,TikTok,TikTok
   # Netflix
   - RULE-SET,Netflix,Netflix
-  - RULE-SET,Netflix_IP,Netflix
   # BiliBili
   - RULE-SET,BiliBili,BiliBili
   # AI
