@@ -119,7 +119,12 @@ router.get('/provider/:token', async (ctx) => {
       }
 
       const config = yaml.load(body) as ClashConfig
-      const proxies = config.proxies.filter((proxy) => (excludeRegex ? !excludeRegex.test(proxy.name) : true))
+      const proxies = config.proxies
+        .filter((proxy) => (excludeRegex ? !excludeRegex.test(proxy.name) : true))
+        .map((proxy) => {
+          proxy.name = proxy.name.replace('🇹🇼', '🇨🇳')
+          return proxy
+        })
 
       // set headers and body
       ctx.set(headers)
@@ -146,11 +151,17 @@ router.get('/provider/:token', async (ctx) => {
           if (!excludeRegex) {
             return true
           }
-          let [, name] = proxy.split('#')
+          const [, name] = proxy.split('#')
           if (!name) {
             return true
           }
-          return !excludeRegex.test(decodeURIComponent(name))
+          const realName = decodeURIComponent(name)
+          return !excludeRegex.test(realName)
+        })
+        .map((proxy) => {
+          const [url, name] = proxy.split('#')
+          const realName = decodeURIComponent(name)
+          return `${url}#${encodeURIComponent(realName.replace('🇹🇼', '🇨🇳'))}`
         })
 
       if (proxies.length > 0) {
