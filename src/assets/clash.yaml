@@ -42,15 +42,6 @@ service-group: &service-group
     - 日本
     - 美国
     - 其它
-service-group-cn: &service-group-cn
-  type: select
-  proxies:
-    - 直连
-    - 香港
-    - 新加坡
-    - 日本
-    - 美国
-    - 其它
 region-group: &region-group
   type: select
   include-all: true
@@ -68,9 +59,6 @@ proxy-groups:
   - name: Netflix
     icon: ${url}/IconSet/Netflix.png
     <<: *service-group
-  - name: BiliBili
-    icon: ${url}/IconSet/BiliBili.png
-    <<: *service-group-cn
   - name: AI
     icon: ${url}/IconSet/AI.png
     <<: *service-group
@@ -179,13 +167,6 @@ rule-providers:
     interval: 86400
     url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Netflix/Netflix_Classical_No_Resolve.yaml
     path: ./Rules/Netflix.yaml
-  # BiliBili
-  BiliBili:
-    type: http
-    behavior: classical
-    interval: 86400
-    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/BiliBili/BiliBili_No_Resolve.yaml
-    path: ./Rules/BiliBili.yaml
   # AI
   OpenAI:
     type: http
@@ -228,8 +209,6 @@ rules:
   - RULE-SET,TikTok,TikTok
   # Netflix
   - RULE-SET,Netflix,Netflix
-  # BiliBili
-  - RULE-SET,BiliBili,BiliBili
   # AI
   - RULE-SET,OpenAI,AI
   - RULE-SET,Claude,AI
