@@ -77,9 +77,6 @@ proxy-groups:
   - name: Meta
     icon: ${url}/IconSet/Meta.png
     <<: *service-group
-  - name: Google
-    icon: ${url}/IconSet/Google.png
-    <<: *service-group
   # Region Groups
   - name: 香港
     icon: ${url}/IconSet/Hong_Kong.png
@@ -245,7 +242,7 @@ rules:
   - RULE-SET,Copilot,默认
   - RULE-SET,Microsoft,DIRECT
   # Google
-  - RULE-SET,Google,Google
+  - RULE-SET,Google,默认
   # Apple
   - RULE-SET,Apple,DIRECT
   - RULE-SET,Apple_Domain,DIRECT
