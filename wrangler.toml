@@ -2,6 +2,7 @@ name = "airbus"
 main = "src/index.ts"
 compatibility_flags = ["nodejs_compat"]
 compatibility_date = "2025-11-28"
+workers_dev = false
 
 [assets]
 directory = "./public"
