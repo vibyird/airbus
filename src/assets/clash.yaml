@@ -65,6 +65,9 @@ proxy-groups:
   - name: Meta
     icon: ${url}/IconSet/Meta.png
     <<: *service-group
+  - name: Unity
+    icon: ${url}/IconSet/Unity.png
+    <<: *service-group
   # Region Groups
   - name: 香港
     icon: ${url}/IconSet/Hong_Kong.png
@@ -199,6 +202,13 @@ rule-providers:
     interval: 86400
     url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Whatsapp/Whatsapp_No_Resolve.yaml
     path: ./Rules/Whatsapp.yaml
+  # Unity
+  Unity:
+    type: http
+    behavior: classical
+    interval: 86400
+    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Unity/Unity_No_Resolve.yaml
+    path: ./Rules/Unity.yaml
 # 规则
 rules:
   - DOMAIN,fastly.jsdelivr.net,DIRECT
@@ -216,6 +226,8 @@ rules:
   - RULE-SET,Facebook,Meta
   - RULE-SET,Instagram,Meta
   - RULE-SET,Whatsapp,Meta
+  # Unity
+  - RULE-SET,Unity,Unity
   # Microsoft
   - RULE-SET,Bing,默认
   - RULE-SET,Copilot,默认
