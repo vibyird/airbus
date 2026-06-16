@@ -26,7 +26,7 @@ router.get('/:token', async (ctx) => {
     return
   }
 
-  const { name: fileName, realName: subscribeName, token: providerToken } = provider
+  const { name: fileName, realName: subscribeName, token: providerToken, subscribeUrl } = provider
   const directDomains = []
   if (process.env.DIRECT_DOMAINS) {
     directDomains.push(
@@ -48,7 +48,9 @@ router.get('/:token', async (ctx) => {
       .replace(/\${subscribeName}/g, subscribeName)
       .replace(
         /\${subscribeUrl}/g,
-        `${ctx.protocol}://${ctx.host}${ctx.url.replace(`/${token}`, `/provider/${providerToken}`)}`,
+        /^proxy\+/.test(subscribeUrl)
+          ? `${ctx.protocol}://${ctx.host}${ctx.url.replace(`/${token}`, `/provider/${providerToken}`)}`
+          : subscribeUrl,
       )
       .replace(
         /([^\r\n]*)\$\{directDomain\}([^\r\n]*)(\r?\n)/m,
@@ -76,7 +78,7 @@ router.get('/provider/:token', async (ctx) => {
 
   const userAgent = ctx.get('user-agent')
   if (/Clash|Stash|Shadowrocket/i.test(userAgent)) {
-    const upstream = new url.URL(subscribeUrl)
+    const upstream = new url.URL(/^proxy\+/.test(subscribeUrl) ? subscribeUrl.replace(/^proxy\+/, '') : subscribeUrl)
     if (!upstream) {
       ctx.throw(502)
       return
