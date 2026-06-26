@@ -3,8 +3,8 @@ import http from 'http'
 import https from 'https'
 import yaml from 'js-yaml'
 import url from 'url'
-import clashConfig from '../assets/clash.yaml'
-import { findProvider } from '../service/subscribe'
+import clashConfig from '@server/assets/clash.yaml'
+import { findProvider } from '@server/services/subscribe'
 
 interface ClashConfig {
   proxies: {
@@ -13,6 +13,7 @@ interface ClashConfig {
 }
 
 const router = new Router()
+
 router.get('/:token', async (ctx) => {
   const token = ctx.params.token
   if (!token) {

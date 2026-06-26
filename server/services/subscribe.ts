@@ -18,14 +18,15 @@ interface Provider {
 }
 
 export async function findProvider(token: string): Promise<Provider | null> {
-  let provider = await env.DB.prepare('SELECT * FROM [providers] WHERE token = ?').bind(token).first<ProviderRecord>()
+  const session = env.DB.withSession()
+  let provider = await session.prepare('SELECT * FROM [providers] WHERE token = ?').bind(token).first<ProviderRecord>()
   if (!provider) {
     return null
   }
   const name = provider.name
   while (/^urn:airbus:/.test(provider.subscribe_uri)) {
     token = provider.subscribe_uri.replace(/^urn:airbus:/, '')
-    provider = await env.DB.prepare('SELECT * FROM [providers] WHERE token = ?').bind(token).first<ProviderRecord>()
+    provider = await session.prepare('SELECT * FROM [providers] WHERE token = ?').bind(token).first<ProviderRecord>()
     if (!provider) {
       return null
     }
