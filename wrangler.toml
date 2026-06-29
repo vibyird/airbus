@@ -9,7 +9,7 @@ not_found_handling = "single-page-application"
 
 [[rules]]
 type = "Text"
-globs = ["**/*.yaml"]
+globs = ["**/*.yaml", "**.*.conf"]
 fallthrough = true
 
 [vars]
