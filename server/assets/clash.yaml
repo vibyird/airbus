@@ -241,8 +241,6 @@ rules:
   - RULE-SET,China,DIRECT
   - RULE-SET,China_Domain,DIRECT
   - RULE-SET,Proxy,Proxy
-  # Custom
-  - DOMAIN-SUFFIX,wakooclub.com,Proxy
   # Private
   - GEOIP,private,DIRECT,no-resolve
   # Others
