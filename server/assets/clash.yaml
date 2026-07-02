@@ -36,7 +36,7 @@ default-group: &default-group
 service-group: &service-group
   type: select
   proxies:
-    - 默认
+    - Proxy
     - 香港
     - 新加坡
     - 日本
@@ -46,7 +46,7 @@ region-group: &region-group
   type: select
   include-all: true
 proxy-groups:
-  - name: 默认
+  - name: Proxy
     icon: ${url}/IconSet/Proxy.png
     <<: *default-group
   # Service Groups
@@ -229,21 +229,22 @@ rules:
   # Unity
   - RULE-SET,Unity,Unity
   # Microsoft
-  - RULE-SET,Bing,默认
-  - RULE-SET,Copilot,默认
+  - RULE-SET,Bing,Proxy
+  - RULE-SET,Copilot,Proxy
   - RULE-SET,Microsoft,DIRECT
   # Google
-  - RULE-SET,Google,默认
+  - RULE-SET,Google,Proxy
   # Apple
   - RULE-SET,Apple,DIRECT
   - RULE-SET,Apple_Domain,DIRECT
   # Others
   - RULE-SET,China,DIRECT
   - RULE-SET,China_Domain,DIRECT
-  - RULE-SET,Proxy,默认
-
+  - RULE-SET,Proxy,Proxy
+  # Custom
+  - DOMAIN-SUFFIX,wakooclub.com,Proxy
   # Private
   - GEOIP,private,DIRECT,no-resolve
   # Others
   - GEOIP,CN,DIRECT
-  - MATCH,默认
+  - MATCH,Proxy
