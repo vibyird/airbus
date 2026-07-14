@@ -36,12 +36,12 @@ router.get('/:token', async (ctx) => {
       'Content-Disposition': `attachment; filename=${fileName}.yaml`,
     })
     ctx.body = clashConfig
-      .replace(/\${url}/g, url)
       .replace(/\${subscribeName}/g, subscribeName)
       .replace(
         /\${subscribeUrl}/g,
         /^proxy\+/.test(subscribeUrl) ? `${url}/api/provider/proxy/${providerToken}` : subscribeUrl,
       )
+      .replace(/\${assetsBaseUrl}/g, process.env.ASSETS_BASE_URL || url)
       .replace(
         /([^\r\n]*)\$\{directDomain\}([^\r\n]*)(\r?\n)/m,
         directDomains.map((directDomain) => `$1${directDomain}$2$3`).join(''),

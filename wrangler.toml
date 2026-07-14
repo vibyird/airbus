@@ -13,6 +13,7 @@ globs = ["**/*.yaml", "**.*.conf"]
 fallthrough = true
 
 [vars]
+ASSETS_BASE_URL = "https://assets.medowo.net"
 DIRECT_DOMAINS = "medowo.net"
 
 [[d1_databases]]

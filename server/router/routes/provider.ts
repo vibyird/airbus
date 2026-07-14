@@ -122,13 +122,12 @@ router.get('/proxy/:token', async (ctx) => {
 router.get('/config/:filename', async (ctx) => {
   const filename = ctx.params.filename
 
-  const url = `${ctx.protocol}://${ctx.host}`
   if ('shadowrocket.conf' === filename) {
     ctx.set({
       'Content-Type': 'text/plain, charset=utf-8',
-      'Content-Disposition': `attachment; filename=shadowrocket.conf`,
+      'Content-Disposition': 'attachment; filename=shadowrocket.conf',
     })
-    ctx.body = shadowrocketConfig.replace(/\${url}/g, url)
+    ctx.body = shadowrocketConfig
     return
   }
   ctx.throw(404)
