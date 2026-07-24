@@ -16,6 +16,9 @@ fallthrough = true
 ASSETS_BASE_URL = "https://assets.medowo.net"
 DIRECT_DOMAINS = "medowo.net"
 
+[triggers]
+crons = [ '0 0 * * *' ]
+
 [[d1_databases]]
 binding = "DB"
 database_name = "airbus"
