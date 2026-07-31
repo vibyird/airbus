@@ -1,15 +1,20 @@
-import App from 'koa'
-import router from './router/index'
-import { httpServerHandler } from 'cloudflare:node'
+import router from '@server/router/index'
+import { cleanUserSession } from '@server/services/user'
 
-const app = new App()
+async function executeDailyTasks(): Promise<void> {
+  await cleanUserSession()
+}
 
-app.use(router.routes()).use(router.allowedMethods())
+export default {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+    return router.fetch(request, env, ctx)
+  },
 
-app.use(async (ctx) => {
-  ctx.throw(404)
-})
-
-app.listen(3000)
-
-export default httpServerHandler({ port: 3000 })
+  async scheduled(controller: ScheduledController, env: Env, ctx: ExecutionContext): Promise<void> {
+    switch (controller.cron) {
+      case '0 0 * * *':
+        await executeDailyTasks()
+        break
+    }
+  },
+}

@@ -1,57 +1,37 @@
-import Router from '@koa/router'
-import clashConfig from '@server/assets/clash.yaml'
-import { findProvider } from '@server/services/provider'
+import { findProvider, getClashConfig } from '@server/services/provider'
+import { Hono as Router } from 'hono'
 
 const router = new Router()
 
 router.get('/:token', async (ctx) => {
-  const token = ctx.params.token
+  const token = ctx.req.param('token')
   if (!token) {
-    ctx.throw(404)
-    return
+    return ctx.notFound()
   }
 
-  let provider = await findProvider(token)
-  if (!provider) {
-    ctx.throw(404)
-    return
-  }
-
-  const { name: fileName, realName: subscribeName, token: providerToken, subscribeUrl } = provider
-  const directDomains = []
-  if (process.env.DIRECT_DOMAINS) {
-    directDomains.push(
-      ...process.env.DIRECT_DOMAINS.split(',')
-        .map((domain) => domain.trim())
-        .filter(Boolean),
-    )
-  }
-  directDomains.push(...provider.directDomains)
-
-  const userAgent = ctx.get('user-agent')
-  const url = `${ctx.protocol}://${ctx.host}`
+  const userAgent = ctx.req.header('User-Agent') ?? ''
+  const url = new URL(ctx.req.url)
+  const baseUrl = `${url.protocol}//${url.host}`
   if (/clash/i.test(userAgent) || /stash/i.test(userAgent)) {
-    ctx.set({
-      'Content-Type': 'application/x-yaml; charset=utf-8',
-      'Content-Disposition': `attachment; filename=${fileName}.yaml`,
+    const res = await getClashConfig(token, baseUrl)
+    if (!res) {
+      return ctx.notFound()
+    }
+
+    const { headers, body } = res
+    return new Response(body, {
+      headers,
     })
-    ctx.body = clashConfig
-      .replace(/\${subscribeName}/g, subscribeName)
-      .replace(
-        /\${subscribeUrl}/g,
-        /^proxy\+/.test(subscribeUrl) ? `${url}/api/provider/proxy/${providerToken}` : subscribeUrl,
-      )
-      .replace(/\${assetsBaseUrl}/g, process.env.ASSETS_BASE_URL || url)
-      .replace(
-        /([^\r\n]*)\$\{directDomain\}([^\r\n]*)(\r?\n)/m,
-        directDomains.map((directDomain) => `$1${directDomain}$2$3`).join(''),
-      )
-    return
   } else if (/Shadowrocket/i.test(userAgent)) {
-    ctx.redirect(`${url}/api/provider/proxy/${providerToken}`)
-    return
+    const provider = await findProvider(token)
+    if (!provider) {
+      return ctx.notFound()
+    }
+
+    const { token: providerToken } = provider
+    return ctx.redirect(`${baseUrl}/api/provider/proxy/${providerToken}`)
   }
-  ctx.throw(404)
+  return ctx.notFound()
 })
 
 export default router
