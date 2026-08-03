@@ -17,15 +17,15 @@ interface Props {
 const props = defineProps<Props>()
 
 function openLink(type: string, provider: Provider): void {
-  const url = new URL(location.href)
-  url.pathname = `/api/subscribe/${provider.token}`
-  url.search = ''
+  const { name, token } = provider
+  const url = `${location.origin}/api/subscribe/${token}`
+
   if (type === 'clash') {
-    location.href = `clash://install-config?url=${encodeURIComponent(url.toString())}&name=${encodeURIComponent(`${provider.name}.yaml`)}`
+    location.href = `clash://install-config?url=${encodeURIComponent(url)}&name=${encodeURIComponent(`${name}.yaml`)}`
   } else if (type === 'stash') {
-    location.href = `stash://install-config?url=${encodeURIComponent(url.toString())}&name=${encodeURIComponent(provider.name)}`
+    location.href = `stash://install-config?url=${encodeURIComponent(url)}&name=${encodeURIComponent(name)}`
   } else if (type === 'shadowrocket') {
-    location.href = `shadowrocket://add/sub://${btoa(url.toString())}#${encodeURIComponent(provider.name)}`
+    location.href = `shadowrocket://add/sub://${btoa(url)}#${encodeURIComponent(name)}`
   }
 }
 </script>

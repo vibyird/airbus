@@ -1,11 +1,18 @@
-import appRoutes from '@/routes/app'
+import routes from '@/routes/app'
 import type { RouteRecordRaw } from 'vue-router'
 
 export default [
   {
     path: '/app',
     component: () => import('@/layouts/App.vue'),
-    children: appRoutes,
+    children: [
+      {
+        path: '',
+        name: 'app',
+        component: () => import('@/views/site/App.vue'),
+      },
+      ...routes,
+    ],
   },
   {
     path: '/',
