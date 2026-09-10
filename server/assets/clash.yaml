@@ -183,6 +183,12 @@ rule-providers:
     interval: 86400
     url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Claude/Claude_No_Resolve.yaml
     path: ./Rules/Claude.yaml
+  Gemini:
+    type: http
+    behavior: classical
+    interval: 86400
+    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Gemini/Gemini_No_Resolve.yaml
+    path: ./Rules/Gemini.yaml
   # Meta
   Facebook:
     type: http
@@ -222,6 +228,7 @@ rules:
   # AI
   - RULE-SET,OpenAI,AI
   - RULE-SET,Claude,AI
+  - RULE-SET,Gemini,AI
   # Meta
   - RULE-SET,Facebook,Meta
   - RULE-SET,Instagram,Meta
