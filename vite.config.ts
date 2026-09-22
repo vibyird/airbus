@@ -1,8 +1,8 @@
-import { fileURLToPath, URL } from 'node:url'
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import vueDevTools from 'vite-plugin-vue-devtools'
 import { cloudflare } from '@cloudflare/vite-plugin'
+import vue from '@vitejs/plugin-vue'
+import path from 'node:path'
+import { defineConfig } from 'vite'
+import vueDevTools from 'vite-plugin-vue-devtools'
 
 function string() {
   return {
@@ -23,8 +23,8 @@ export default defineConfig({
   plugins: [vue(), vueDevTools(), string(), cloudflare()],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
-      '@server/*': fileURLToPath(new URL('./server', import.meta.url)),
+      '@': path.resolve(import.meta.dirname, 'src'),
+      '@server': path.resolve(import.meta.dirname, 'server'),
     },
   },
   build: {
