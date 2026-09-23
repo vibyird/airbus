@@ -10,7 +10,7 @@ export default {
     return router.fetch(request, env, ctx)
   },
 
-  async scheduled(controller: ScheduledController, env: Env, ctx: ExecutionContext): Promise<void> {
+  async scheduled(controller: ScheduledController): Promise<void> {
     switch (controller.cron) {
       case '0 0 * * *':
         await executeDailyTasks()

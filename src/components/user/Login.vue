@@ -69,17 +69,17 @@ async function confirm(): Promise<void> {
     <v-card-text>
       <v-form ref="form" @submit.prevent="confirm">
         <v-text-field
+          v-model="email"
           type="email"
           density="compact"
-          v-model="email"
           prepend-inner-icon="mdi-email"
           placeholder="请输入邮箱"
           :rules="[(v) => !!v || '邮箱不能为空']">
         </v-text-field>
         <v-text-field
+          v-model="password"
           type="password"
           density="compact"
-          v-model="password"
           prepend-inner-icon="mdi-lock"
           placeholder="请输入密码"
           :rules="[(v) => !!v || '密码不能为空']">

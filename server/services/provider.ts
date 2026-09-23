@@ -28,7 +28,10 @@ interface Provider {
 
 export async function getProviderList(uid: number): Promise<Provider[]> {
   const session = env.DB.withSession()
-  let { results } = await session.prepare('SELECT * FROM [providers] WHERE uid = ? and name != ""').bind(uid).all<ProviderRecord>()
+  const { results } = await session
+    .prepare('SELECT * FROM [providers] WHERE uid = ? and name != ""')
+    .bind(uid)
+    .all<ProviderRecord>()
   if (!results.length) {
     return []
   }
@@ -49,7 +52,7 @@ export async function getClashConfig(
   token: string,
   baseUrl: string,
 ): Promise<{ headers: Headers; body: string } | null> {
-  let provider = await findProvider(token)
+  const provider = await findProvider(token)
   if (!provider) {
     return null
   }
@@ -95,7 +98,7 @@ export async function getClashProxyConfig(
   token: string,
   userAgent: string,
 ): Promise<{ headers: Headers; body: string } | null> {
-  let provider = await findProvider(token)
+  const provider = await findProvider(token)
   if (!provider) {
     return null
   }
@@ -147,7 +150,7 @@ export async function getShadowrocketProxyConfig(
   token: string,
   userAgent: string,
 ): Promise<{ headers: Headers; body: string } | null> {
-  let provider = await findProvider(token)
+  const provider = await findProvider(token)
   if (!provider) {
     return null
   }

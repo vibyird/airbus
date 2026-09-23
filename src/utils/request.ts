@@ -18,7 +18,7 @@ export async function request<T = void>(
     handleUnauthenticated = true,
   }: Partial<{
     method: string
-    data: any
+    data: unknown
     handleUnauthenticated: boolean
   }> = {},
 ): Promise<T> {

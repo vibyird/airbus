@@ -15,9 +15,11 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div v-if="ready" v-for="(provider, i) in providers" :key="i" class="mb-4">
-    <ProviderItem :provider="provider" />
-  </div>
+  <template v-if="ready">
+    <div v-for="(provider, i) in providers" :key="i" class="mb-4">
+      <ProviderItem :provider="provider" />
+    </div>
+  </template>
   <div v-else class="d-flex align-center justify-center fill-height">
     <v-progress-circular indeterminate color="primary" size="64" width="6" />
   </div>

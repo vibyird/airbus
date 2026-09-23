@@ -22,10 +22,10 @@ export async function generateHashFromPassword(
         return reject(err)
       }
       resolve(
-        `\$pbkdf2-${digest}\$i=${iterations}\$${salt
+        `$pbkdf2-${digest}$i=${iterations}$${salt
           .toString('base64url')
           .replaceAll('-', '+')
-          .replaceAll('_', '/')}\$${derivedKey.toString('base64url').replaceAll('-', '+').replaceAll('_', '/')}`,
+          .replaceAll('_', '/')}$${derivedKey.toString('base64url').replaceAll('-', '+').replaceAll('_', '/')}`,
       )
     })
   })

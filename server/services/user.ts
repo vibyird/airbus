@@ -5,7 +5,7 @@ import crypto from 'crypto'
 
 export async function authenticateUser(email: string, password: string): Promise<User | null> {
   const session = env.DB.withSession()
-  let user = await session.prepare('SELECT * FROM [users] WHERE email = ?').bind(email).first<UserRecord>()
+  const user = await session.prepare('SELECT * FROM [users] WHERE email = ?').bind(email).first<UserRecord>()
   if (!user) {
     return null
   }
@@ -36,7 +36,7 @@ export async function createSession(uid: number): Promise<{ token: string; expir
 
 async function findUser(uid: number): Promise<User | null> {
   const session = env.DB.withSession()
-  let user = await session.prepare('SELECT * FROM [users] WHERE uid = ?').bind(uid).first<UserRecord>()
+  const user = await session.prepare('SELECT * FROM [users] WHERE uid = ?').bind(uid).first<UserRecord>()
   if (!user) {
     return null
   }
@@ -45,7 +45,10 @@ async function findUser(uid: number): Promise<User | null> {
 
 export async function findUserByToken(token: string): Promise<User | null> {
   const session = env.DB.withSession()
-  let userSession = await session.prepare('SELECT * FROM [sessions] WHERE token = ?').bind(token).first<SessionRecord>()
+  const userSession = await session
+    .prepare('SELECT * FROM [sessions] WHERE token = ?')
+    .bind(token)
+    .first<SessionRecord>()
   if (!userSession) {
     return null
   }

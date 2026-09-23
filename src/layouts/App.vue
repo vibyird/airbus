@@ -116,7 +116,7 @@ onMounted(async () => {
       </v-list>
     </v-navigation-drawer>
     <v-main>
-      <v-container class="fill-height" v-if="user.status === 'authenticated'">
+      <v-container v-if="user.status === 'authenticated'" class="fill-height">
         <router-view />
       </v-container>
       <v-container v-else class="d-flex align-center justify-center fill-height">

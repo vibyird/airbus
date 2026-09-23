@@ -93,23 +93,23 @@ async function confirm(): Promise<void> {
       <v-form ref="form">
         <v-label class="d-block mb-2 text-body-large">当前密码<span class="text-error">*</span></v-label>
         <v-text-field
+          v-model="password"
           type="password"
           density="compact"
-          v-model="password"
           placeholder="请输入当前密码"
           :rules="[(v) => !!v || '当前密码不能为空']" />
         <v-label class="d-block mb-2 text-body-large">新密码<span class="text-error">*</span></v-label>
         <v-text-field
+          v-model="newPassword"
           type="password"
           density="compact"
-          v-model="newPassword"
           placeholder="请输入新密码"
           :rules="[(v) => !!v || '新密码不能为空']" />
         <v-label class="d-block mb-2 text-body-large">确认新密码<span class="text-error">*</span></v-label>
         <v-text-field
+          v-model="newPasswordConfirm"
           type="password"
           density="compact"
-          v-model="newPasswordConfirm"
           placeholder="请确认新密码"
           :rules="[(v) => !!v || '确认新密码不能为空']" />
       </v-form>

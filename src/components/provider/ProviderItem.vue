@@ -14,7 +14,7 @@ interface Props {
   provider: Provider
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 
 function openLink(type: string, provider: Provider): void {
   const { name, token } = provider

@@ -10,3 +10,4 @@
 LICENSE
 
 .nvmrc
+worker-configuration.d.ts
