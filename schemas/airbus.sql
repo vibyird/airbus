@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS "providers" (
   "uid" INTEGER NOT NULL,
   "name" TEXT NOT NULL,
   "subscribe_uri" TEXT NOT NULL,
+  "nameservers" TEXT NOT NULL,
   "direct_domains" TEXT NOT NULL,
   "exclude_regex" TEXT NOT NULL
 );

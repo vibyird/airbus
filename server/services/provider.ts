@@ -13,6 +13,7 @@ interface ProviderRecord {
   token: string
   name: string
   subscribe_uri: string
+  nameservers: string
   direct_domains: string
   exclude_regex: string
 }
@@ -22,6 +23,7 @@ interface Provider {
   realName: string
   token: string
   subscribeUrl: string
+  nameservers: string[]
   directDomains: string[]
   excludeRegex: RegExp | null
 }
@@ -40,6 +42,10 @@ export async function getProviderList(uid: number): Promise<Provider[]> {
     realName: '',
     token: result.token,
     subscribeUrl: result.subscribe_uri,
+    nameservers: result.nameservers
+      .split(',')
+      .map((nameserver) => nameserver.trim())
+      .filter(Boolean),
     directDomains: result.direct_domains
       .split(',')
       .map((domain) => domain.trim())
@@ -63,6 +69,14 @@ export async function getClashConfig(
     return null
   }
 
+  const nameservers = []
+
+  if (provider.nameservers.length) {
+    nameservers.push(...provider.nameservers)
+  } else {
+    nameservers.push(...['https://doh.pub/dns-query', 'https://dns.alidns.com/dns-query'])
+  }
+
   const directDomains = []
   if (process.env.DIRECT_DOMAINS) {
     directDomains.push(
@@ -78,6 +92,10 @@ export async function getClashConfig(
   headers.set('Content-Type', 'application/x-yaml; charset=UTF-8')
 
   const body = clashConfig
+    .replace(
+      /([^\r\n]*)\$\{nameserver\}([^\r\n]*)(\r?\n)/m,
+      nameservers.map((nameserver) => `$1${nameserver}$2$3`).join(''),
+    )
     .replace(/\${subscribeName}/g, subscribeName)
     .replace(
       /\${subscribeUrl}/g,
@@ -237,6 +255,10 @@ export async function findProvider(token: string): Promise<Provider | null> {
     realName: provider.name,
     token: provider.token,
     subscribeUrl: provider.subscribe_uri,
+    nameservers: provider.nameservers
+      .split(',')
+      .map((nameserver) => nameserver.trim())
+      .filter(Boolean),
     directDomains: provider.direct_domains
       .split(',')
       .map((domain) => domain.trim())
