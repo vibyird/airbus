@@ -1,16 +1,10 @@
 name = "airbus"
 main = "server/index.ts"
-compatibility_flags = ["nodejs_compat"]
-compatibility_date = "2025-11-28"
+compatibility_date = "2026-08-04"
 workers_dev = false
 
 [assets]
 not_found_handling = "single-page-application"
-
-[[rules]]
-type = "Text"
-globs = ["**/*.yaml", "**.*.conf"]
-fallthrough = true
 
 [vars]
 ASSETS_BASE_URL = "https://assets.medowo.net"
@@ -24,17 +18,9 @@ binding = "DB"
 database_name = "airbus"
 database_id = "2a28bd4b-f320-4f81-91ab-3cca39c562fc"
 
-[observability]
-enabled = false
-head_sampling_rate = 1
-
 [observability.logs]
 enabled = true
-head_sampling_rate = 1
-persist = true
 invocation_logs = true
 
 [observability.traces]
 enabled = false
-persist = true
-head_sampling_rate = 1
