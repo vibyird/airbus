@@ -116,18 +116,6 @@ rule-providers:
     interval: 86400
     url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Microsoft/Microsoft_No_Resolve.yaml
     path: ./Rules/Microsoft.yaml
-  Bing:
-    type: http
-    behavior: classical
-    interval: 86400
-    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Bing/Bing_No_Resolve.yaml
-    path: ./Rules/Bing.yaml
-  Copilot:
-    type: http
-    behavior: classical
-    interval: 86400
-    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Copilot/Copilot_No_Resolve.yaml
-    path: ./Rules/Copilot.yaml
   # Google
   Google:
     type: http
@@ -235,8 +223,6 @@ rules:
   # Unity
   - RULE-SET,Unity,Unity
   # Microsoft
-  - RULE-SET,Bing,Proxy
-  - RULE-SET,Copilot,Proxy
   - RULE-SET,Microsoft,DIRECT
   # Google
   - RULE-SET,Google,Proxy
