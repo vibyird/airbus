@@ -58,14 +58,17 @@ proxy-groups:
   - name: Netflix
     icon: ${assetsBaseUrl}/IconSet/Netflix.png
     <<: *service-group
+  - name: Unity
+    icon: ${assetsBaseUrl}/IconSet/Unity.png
+    <<: *service-group
   - name: AI
     icon: ${assetsBaseUrl}/IconSet/AI.png
     <<: *service-group
   - name: Meta
     icon: ${assetsBaseUrl}/IconSet/Meta.png
     <<: *service-group
-  - name: Unity
-    icon: ${assetsBaseUrl}/IconSet/Unity.png
+  - name: Google
+    icon: ${assetsBaseUrl}/IconSet/Google.png
     <<: *service-group
   # Region Groups
   - name: 香港
@@ -116,13 +119,6 @@ rule-providers:
     interval: 86400
     url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Microsoft/Microsoft_No_Resolve.yaml
     path: ./Rules/Microsoft.yaml
-  # Google
-  Google:
-    type: http
-    behavior: classical
-    interval: 86400
-    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Google/Google_No_Resolve.yaml
-    path: ./Rules/Google.yaml
   # Apple
   Apple:
     type: http
@@ -136,6 +132,13 @@ rule-providers:
     interval: 86400
     url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Apple/Apple_Domain.yaml
     path: ./Rules/Apple_Domain.yaml
+  # Google
+  Google:
+    type: http
+    behavior: classical
+    interval: 86400
+    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Google/Google_No_Resolve.yaml
+    path: ./Rules/Google.yaml
   # YouTube
   YouTube:
     type: http
@@ -157,6 +160,13 @@ rule-providers:
     interval: 86400
     url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Netflix/Netflix_Classical_No_Resolve.yaml
     path: ./Rules/Netflix.yaml
+  # Unity
+  Unity:
+    type: http
+    behavior: classical
+    interval: 86400
+    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Unity/Unity_No_Resolve.yaml
+    path: ./Rules/Unity.yaml
   # AI
   OpenAI:
     type: http
@@ -170,12 +180,6 @@ rule-providers:
     interval: 86400
     url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Claude/Claude_No_Resolve.yaml
     path: ./Rules/Claude.yaml
-  Gemini:
-    type: http
-    behavior: classical
-    interval: 86400
-    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Gemini/Gemini_No_Resolve.yaml
-    path: ./Rules/Gemini.yaml
   # Meta
   Facebook:
     type: http
@@ -195,13 +199,6 @@ rule-providers:
     interval: 86400
     url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Whatsapp/Whatsapp_No_Resolve.yaml
     path: ./Rules/Whatsapp.yaml
-  # Unity
-  Unity:
-    type: http
-    behavior: classical
-    interval: 86400
-    url: https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script/rule/Clash/Unity/Unity_No_Resolve.yaml
-    path: ./Rules/Unity.yaml
 # 规则
 rules:
   - DOMAIN,fastly.jsdelivr.net,DIRECT
@@ -215,20 +212,19 @@ rules:
   # AI
   - RULE-SET,OpenAI,AI
   - RULE-SET,Claude,AI
-  - RULE-SET,Gemini,AI
+  # Unity
+  - RULE-SET,Unity,Unity
   # Meta
   - RULE-SET,Facebook,Meta
   - RULE-SET,Instagram,Meta
   - RULE-SET,Whatsapp,Meta
-  # Unity
-  - RULE-SET,Unity,Unity
   # Microsoft
   - RULE-SET,Microsoft,DIRECT
-  # Google
-  - RULE-SET,Google,Proxy
   # Apple
   - RULE-SET,Apple,DIRECT
   - RULE-SET,Apple_Domain,DIRECT
+  # Google
+  - RULE-SET,Google,Google
   # Others
   - RULE-SET,China,DIRECT
   - RULE-SET,China_Domain,DIRECT
