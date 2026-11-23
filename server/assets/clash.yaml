@@ -49,9 +49,6 @@ proxy-groups:
     icon: ${assetsBaseUrl}/IconSet/Proxy.png
     <<: *default-group
   # Service Groups
-  - name: YouTube
-    icon: ${assetsBaseUrl}/IconSet/YouTube.png
-    <<: *service-group
   - name: TikTok
     icon: ${assetsBaseUrl}/IconSet/TikTok.png
     <<: *service-group
@@ -203,8 +200,6 @@ rule-providers:
 rules:
   - DOMAIN,fastly.jsdelivr.net,DIRECT
   - DOMAIN-SUFFIX,${directDomain},DIRECT
-  # YouTube
-  - RULE-SET,YouTube,YouTube
   # TikTok
   - RULE-SET,TikTok,TikTok
   # Netflix
@@ -224,6 +219,7 @@ rules:
   - RULE-SET,Apple,DIRECT
   - RULE-SET,Apple_Domain,DIRECT
   # Google
+  - RULE-SET,YouTube,Google
   - RULE-SET,Google,Google
   # Others
   - RULE-SET,China,DIRECT
